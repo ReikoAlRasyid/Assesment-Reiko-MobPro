@@ -1,0 +1,17 @@
+
+<resources>
+    <string name="app_name" translatable="true">Laundry YUK</string>
+    <string name="price" translatable="true">Price</string>
+    <string name="weight" translatable="true">Weight(Kg)</string>
+    <string name="submit" translatable="true">Submit</string>
+    <string name="invalid_input" translatable="true">Invalid input, please fill in all fields.</string>
+    <string name="about">About Laundry</string>
+    <string name="back" translatable="true">Back</string>
+    <string name="share" translatable="true">Share</string>
+    <string name="copyright" translatable="false">This App Is Used For measurement of your Laundry For Price And Weight Of It, Also For your type of Laundry\n\nPremium Laundry = Laundry that Doesn\'t Need Long Time to finish only in 6–8 Hour Or A Day only\nNormal Laundry = Is Your Typical Laundry 24Hour++ Or A 2 Day\n\nCopyright © 2024 Reiko Alaudin Rasyid\n\nAll rights reserved.</string>
+    <string name="normal" translatable="true">Normal</string>
+    <string name="premium" translatable="true">Premium</string>
+    <string name="intro" translatable="true">Welcome to the Laundry Yuk, an Application that can help you calculate the weight, price and type of your Laundry. Currently this application can only calculate the weight, price and type. But maybe in the future you will also be able to order Laundry Services from Here, Come on Lets Try It!!</string>
+    <string name="yes" translatable="true">Yes</string>
+    <string name="no" translatable="true">No</string>
+</resources>

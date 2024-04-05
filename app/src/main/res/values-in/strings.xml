@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Laundry YUK</string>
+    <string name="price">Harga</string>
+    <string name="submit">Masukan</string>
+    <string name="invalid_input">Masukan Tidak Valid, Mohon isi semua form</string>
+    <string name="about">Tentang Laundry</string>
+    <string name="back">Kembali</string>
+    <string name="share">Bagikan</string>
+    <string name="normal">Normal</string>
+    <string name="premium">Premium</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="weight">Berat</string>
+    <string name="intro">Selamat Datang Di Aplikasi Laundry Yuk, Aplikasi Yang bisa membantu anda menghitung berat, harga, dan Tipe dari Laundry Anda, Untuk Saat Ini aplikasi ini hanya dapat menghitung berat, harga, dan tipe Tetapi mungkin yang akan datang Anda juga mampu memesan Jasa Laundry Dari Sini, Mari Silahkan Coba!!</string>
+</resources>
