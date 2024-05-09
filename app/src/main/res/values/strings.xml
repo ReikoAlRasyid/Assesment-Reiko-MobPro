@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name" translatable="true">Laundry YUK</string>
     <string name="price" translatable="true">Price</string>
+    <string name="name" translatable="true">Order Name</string>
     <string name="weight" translatable="true">Weight(Kg)</string>
     <string name="submit" translatable="true">Submit</string>
     <string name="invalid_input" translatable="true">Invalid input, please fill in all fields.</string>
@@ -14,4 +15,17 @@
     <string name="intro" translatable="true">Welcome to the Laundry Yuk, an Application that can help you calculate the weight, price and type of your Laundry. Currently this application can only calculate the weight, price and type. But maybe in the future you will also be able to order Laundry Services from Here, Come on Lets Try It!!</string>
     <string name="yes" translatable="true">Yes</string>
     <string name="no" translatable="true">No</string>
+    <string name="empty" translatable="true">No Data</string>
+    <string name="click" translatable="true">%1$s Clicked!</string>
+    <string name="add" translatable="true">Add Laundry</string>
+    <string name="edit" translatable="true">Edit Order</string>
+    <string name="save" translatable="true">Save</string>
+    <string name="list" translatable="true">List View</string>
+    <string name="grid" translatable="true">Grid View</string>
+    <string name="invalid" translatable="true">Cannot Be Empty</string>
+    <string name="delete" translatable="true">Delete Order</string>
+    <string name="delete_msg" translatable="true">Delete Order?</string>
+    <string name="delete_btn" translatable="true">Delete</string>
+    <string name="cancel" translatable="true">Cancel</string>
+    <string name="others" translatable="true">Others</string>
 </resources>

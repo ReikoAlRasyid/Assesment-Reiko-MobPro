@@ -13,4 +13,18 @@
     <string name="no">Tidak</string>
     <string name="weight">Berat</string>
     <string name="intro">Selamat Datang Di Aplikasi Laundry Yuk, Aplikasi Yang bisa membantu anda menghitung berat, harga, dan Tipe dari Laundry Anda, Untuk Saat Ini aplikasi ini hanya dapat menghitung berat, harga, dan tipe Tetapi mungkin yang akan datang Anda juga mampu memesan Jasa Laundry Dari Sini, Mari Silahkan Coba!!</string>
+    <string name="empty">Belum Ada Data</string>
+    <string name="click">%1$s diklik!</string>
+    <string name="add">Tambah Laundry</string>
+    <string name="list">Tampilan list</string>
+    <string name="grid">Tampilan grid</string>
+    <string name="edit">Edit Pesanan</string>
+    <string name="invalid">Tidak Boleh Kosong</string>
+    <string name="save">Simpan</string>
+    <string name="delete">Hapus Pesanan</string>
+    <string name="delete_msg">Hapus Pesanan ini?</string>
+    <string name="delete_btn">Hapus</string>
+    <string name="cancel">Batal</string>
+    <string name="name">Nama Pesanan</string>
+    <string name="others">Lainnya</string>
 </resources>
