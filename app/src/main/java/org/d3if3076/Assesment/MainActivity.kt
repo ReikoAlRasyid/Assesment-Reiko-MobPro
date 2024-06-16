@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import org.d3if3076.Assesment.navigation.SetupNavGraph
+import org.d3if3076.Assesment.ui.screen.MainScreen
 import org.d3if3076.Assesment.ui.theme.MobproTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,8 +19,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    SetupNavGraph()
+                ){
+                    MainScreen()
                 }
             }
         }

@@ -27,4 +27,11 @@
     <string name="cancel">Batal</string>
     <string name="name">Nama Pesanan</string>
     <string name="others">Lainnya</string>
+    <string name="profil">Profil</string>
+    <string name="close">Tutup</string>
+    <string name="logout">Keluar</string>
+    <string name="error">Error</string>
+    <string name="try_again">Coba Lagi</string>
+    <string name="picture">Gambar</string>
+    <string name="jenis">Kategori</string>
 </resources>

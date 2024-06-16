@@ -27,5 +27,12 @@
     <string name="delete_msg" translatable="true">Delete Order?</string>
     <string name="delete_btn" translatable="true">Delete</string>
     <string name="cancel" translatable="true">Cancel</string>
+    <string name="profil" translatable="true">Profile</string>
     <string name="others" translatable="true">Others</string>
+    <string name="close" translatable="true">Close</string>
+    <string name="logout" translatable="true">Log Out</string>
+    <string name="error" translatable="true">Error</string>
+    <string name="jenis" translatable="true">Category</string>
+    <string name="picture" translatable="true">Picture</string>
+    <string name="try_again" translatable="true">Try Again</string>
 </resources>

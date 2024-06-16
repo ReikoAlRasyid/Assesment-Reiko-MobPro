@@ -6,11 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "laundry")
 data class Laundry(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+    val id: Int = 0,
     val nama: String,
     val berat: String,
-    val total: Float,
     val jenis: String,
-    val tanggal: String
+    val imageId: String,
 )
 
