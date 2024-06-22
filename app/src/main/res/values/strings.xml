@@ -32,7 +32,9 @@
     <string name="close" translatable="true">Close</string>
     <string name="logout" translatable="true">Log Out</string>
     <string name="error" translatable="true">Error</string>
-    <string name="errormsg" translatable="true">Please Fill All Fields Required</string>
+    <string name="errormsg_weight" translatable="true">Please Fill Weight Field</string>
+    <string name="errormsg_jenis" translatable="true">Please Fill Category Field</string>
+    <string name="errormsg_nama" translatable="true">Please Fill Name Field</string>
     <string name="jenis" translatable="true">Category</string>
     <string name="picture" translatable="true">Picture</string>
     <string name="try_again" translatable="true">Try Again</string>

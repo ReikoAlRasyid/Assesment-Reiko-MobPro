@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -42,7 +43,9 @@ fun LaundryDialog(
     var nama by remember { mutableStateOf("") }
     var berat by remember { mutableStateOf("") }
     var jenis by remember { mutableStateOf("") }
-    var showError by remember { mutableStateOf(false) }
+    var showErrorNama by remember { mutableStateOf(false) }
+    var showErrorBerat by remember { mutableStateOf(false) }
+    var showErrorJenis by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -66,7 +69,7 @@ fun LaundryDialog(
                     value = nama,
                     onValueChange = {
                         nama = it
-                        showError = false
+                        showErrorNama = false
                     },
                     label = { Text(text = stringResource(id = R.string.name)) },
                     maxLines = 1,
@@ -76,11 +79,18 @@ fun LaundryDialog(
                     ),
                     modifier = Modifier.padding(8.dp)
                 )
+                if (showErrorNama) {
+                    Text(
+                        text = stringResource(id = R.string.errormsg_nama),
+                        color = Color.Red,
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                    )
+                }
                 OutlinedTextField(
                     value = berat,
                     onValueChange = {
                         berat = it
-                        showError = false
+                        showErrorBerat = false
                     },
                     label = { Text(text = stringResource(id = R.string.weight)) },
                     maxLines = 1,
@@ -90,6 +100,13 @@ fun LaundryDialog(
                     ),
                     modifier = Modifier.padding(8.dp)
                 )
+                if (showErrorBerat) {
+                    Text(
+                        text = stringResource(id = R.string.errormsg_weight),
+                        color = Color.Red,
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -101,7 +118,7 @@ fun LaundryDialog(
                             selected = jenis == "Premium",
                             onClick = {
                                 jenis = "Premium"
-                                showError = false
+                                showErrorJenis = false
                             }
                         )
                         Text(text = stringResource(id = R.string.premium))
@@ -111,17 +128,17 @@ fun LaundryDialog(
                             selected = jenis == "Normal",
                             onClick = {
                                 jenis = "Normal"
-                                showError = false
+                                showErrorJenis = false
                             }
                         )
                         Text(text = stringResource(id = R.string.normal))
                     }
                 }
-                if (showError) {
+                if (showErrorJenis) {
                     Text(
-                        text = stringResource(id = R.string.errormsg),
-                        color = androidx.compose.ui.graphics.Color.Red,
-                        modifier = Modifier.padding(8.dp)
+                        text = stringResource(id = R.string.errormsg_jenis),
+                        color = Color.Red,
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                     )
                 }
                 Row(
@@ -138,9 +155,11 @@ fun LaundryDialog(
                     }
                     OutlinedButton(
                         onClick = {
-                            if (nama.isEmpty() || berat.isEmpty() || jenis.isEmpty()) {
-                                showError = true
-                            } else {
+                            val hasError = nama.isEmpty() || berat.isEmpty() || jenis.isEmpty()
+                            showErrorNama = nama.isEmpty()
+                            showErrorBerat = berat.isEmpty()
+                            showErrorJenis = jenis.isEmpty()
+                            if (!hasError) {
                                 onConfirmation(nama, berat, jenis)
                             }
                         },

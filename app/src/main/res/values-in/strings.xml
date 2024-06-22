@@ -33,6 +33,9 @@
     <string name="error">Error</string>
     <string name="try_again">Coba Lagi</string>
     <string name="picture">Gambar</string>
+    <string name="errormsg_weight">Tolong Isi Berat</string>
+    <string name="errormsg_jenis">Tolong Isi Jenis</string>
     <string name="jenis">Kategori</string>
+    <string name="errormsg_nama">Tolong Isi Nama</string>
     <string name="errormsg">Mohon Isi Semua Yang Dibutuhkan</string>
 </resources>
