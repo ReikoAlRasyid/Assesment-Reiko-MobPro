@@ -282,7 +282,7 @@ fun ListItem(hewan: Laundry, onDelete: (Int) -> Unit) {
                     color = Color.White
                 )
                 Text(
-                    text = hewan.berat,
+                    text = "${hewan.berat} KG",
                     fontSize = 14.sp,
                     color = Color.White
                 )

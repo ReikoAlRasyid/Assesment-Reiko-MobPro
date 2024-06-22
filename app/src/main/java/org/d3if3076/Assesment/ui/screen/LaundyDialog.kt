@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +42,7 @@ fun LaundryDialog(
     var nama by remember { mutableStateOf("") }
     var berat by remember { mutableStateOf("") }
     var jenis by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -51,16 +53,21 @@ fun LaundryDialog(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    bitmap = bitmap!!.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                )
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                    )
+                }
                 OutlinedTextField(
                     value = nama,
-                    onValueChange = {nama = it},
+                    onValueChange = {
+                        nama = it
+                        showError = false
+                    },
                     label = { Text(text = stringResource(id = R.string.name)) },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
@@ -71,7 +78,10 @@ fun LaundryDialog(
                 )
                 OutlinedTextField(
                     value = berat,
-                    onValueChange = {berat = it},
+                    onValueChange = {
+                        berat = it
+                        showError = false
+                    },
                     label = { Text(text = stringResource(id = R.string.weight)) },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
@@ -80,17 +90,40 @@ fun LaundryDialog(
                     ),
                     modifier = Modifier.padding(8.dp)
                 )
-                OutlinedTextField(
-                    value = jenis,
-                    onValueChange = {jenis = it},
-                    label = { Text(text = stringResource(id = R.string.jenis)) },
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier.padding(8.dp)
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.jenis))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = jenis == "Premium",
+                            onClick = {
+                                jenis = "Premium"
+                                showError = false
+                            }
+                        )
+                        Text(text = stringResource(id = R.string.premium))
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = jenis == "Normal",
+                            onClick = {
+                                jenis = "Normal"
+                                showError = false
+                            }
+                        )
+                        Text(text = stringResource(id = R.string.normal))
+                    }
+                }
+                if (showError) {
+                    Text(
+                        text = stringResource(id = R.string.errormsg),
+                        color = androidx.compose.ui.graphics.Color.Red,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -104,8 +137,13 @@ fun LaundryDialog(
                         Text(text = stringResource(id = R.string.cancel))
                     }
                     OutlinedButton(
-                        onClick = { onConfirmation(nama, berat, jenis) },
-                        enabled = nama.isNotEmpty() && berat.isNotEmpty() && jenis.isNotEmpty(),
+                        onClick = {
+                            if (nama.isEmpty() || berat.isEmpty() || jenis.isEmpty()) {
+                                showError = true
+                            } else {
+                                onConfirmation(nama, berat, jenis)
+                            }
+                        },
                         modifier = Modifier.padding(8.dp)
                     ) {
                         Text(text = stringResource(id = R.string.save))
