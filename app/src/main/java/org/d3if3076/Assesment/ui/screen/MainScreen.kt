@@ -47,155 +47,178 @@ import org.d3if3076.Assesment.R
 import org.d3if3076.Assesment.navigation.Screen
 import org.d3if3076.Assesment.ui.theme.MobproTheme
 
-        @OptIn(ExperimentalMaterial3Api::class)
-        @Composable
-        fun MainScreen(navController: NavHostController) {
-            Scaffold (
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(text = stringResource(id = R.string.app_name))
-                        },
-                        colors = TopAppBarDefaults.mediumTopAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            titleContentColor = MaterialTheme.colorScheme.primary,
-                        ),
-                        actions = {
-                            IconButton(onClick = {navController.navigate(Screen.About.route)}) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Info,
-                                    contentDescription = stringResource(R.string.about),
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-
-                            }
-                        }
-                    )
-                }
-            ) { padding ->
-                ScreenContent(Modifier.padding(padding))
-            }
-        }
-        @Composable
-        fun ScreenContent(modifier: Modifier) {
-            val selectedType = rememberSaveable { mutableStateOf("") }
-            val berat = rememberSaveable { mutableStateOf("") }
-
-            var totalHarga by remember { mutableStateOf<Float?>(null) }
-            var valid by remember { mutableStateOf(true) }
-            val context = LocalContext.current
-
-
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = R.drawable.laundry,
-                        builder = {
-                            crossfade(true)
-                        }
-                    ),
-                    contentDescription = "Laundry Img",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.intro),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically //
-                ) {
-                    RadioButton(
-                        selected = selectedType.value == "Normal",
-                        onClick = { selectedType.value = "Normal" }
-                    )
-                    Text(text = stringResource(id = R.string.normal))
-                    RadioButton(
-                        selected = selectedType.value == "Premium",
-                        onClick = { selectedType.value = "Premium" }
-                    )
-                    Text(text = stringResource(id = R.string.premium))
-                }
-                OutlinedTextField(
-                    value = berat.value,
-                    onValueChange = { newValue ->
-                        berat.value = newValue
-                    },
-                    label = { Text(text = stringResource(id = R.string.weight)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                Button(
-                    onClick = {
-                        valid = true
-                        if (selectedType.value.isEmpty() || berat.value.isEmpty()) {
-                            valid = false
-                        } else {
-                            val berat = berat.value.toFloatOrNull()
-                            if (berat != null) {
-                                val total: Float
-                                if (selectedType.value == "Premium") {
-                                    total = berat * 8000
-                                    totalHarga = total
-                                } else if (selectedType.value == "Normal") {
-                                    total = berat * 6000
-                                    totalHarga = total
-                                }
-                            }
-
-                        }
-                    },
-                    modifier = Modifier.padding(top = 20.dp)
-                ) {
-                    Text(text = "Submit")
-                }
-                if (valid && totalHarga != null) {
-                    Text(
-                        text = "Laundry: ${selectedType.value}\nTotal: Rp.${totalHarga!!}",
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    Button(
-                        onClick = {
-                            shareData(context, "Laundry: ${selectedType.value}\nTotal: Rp.${totalHarga!!}")
-                        },
-                        modifier = Modifier.padding(top = 8.dp),
-                        contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-                    ) {
-                        Text(text = stringResource(R.string.share))
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreen(navController: NavHostController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                },
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                actions = {
+                    IconButton(onClick = { navController.navigate(Screen.About.route) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.about),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
-                if (!valid) {
-                    Text(text = stringResource(R.string.invalid_input))
-                }
-            }
+            )
         }
-        private fun shareData(context: Context, message: String) {
-            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, message)
-            }
-            if (shareIntent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(shareIntent)
-            }
+    ) { padding ->
+        ScreenContent(Modifier.padding(padding))
+    }
+}
+
+@Composable
+fun ScreenContent(modifier: Modifier) {
+    val selectedType = rememberSaveable { mutableStateOf("") }
+    val berat = rememberSaveable { mutableStateOf("") }
+
+    var totalHarga by remember { mutableStateOf<Float?>(null) }
+    var valid by remember { mutableStateOf(true) }
+    var weightError by remember { mutableStateOf(false) }
+    var typeError by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = rememberImagePainter(
+                data = R.drawable.laundry,
+                builder = {
+                    crossfade(true)
+                }
+            ),
+            contentDescription = "Laundry Img",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.intro),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = selectedType.value == "Normal",
+                onClick = {
+                    selectedType.value = "Normal"
+                    typeError = false
+                }
+            )
+            Text(text = stringResource(id = R.string.normal))
+            RadioButton(
+                selected = selectedType.value == "Premium",
+                onClick = {
+                    selectedType.value = "Premium"
+                    typeError = false
+                }
+            )
+            Text(text = stringResource(id = R.string.premium))
+        }
+        if (typeError) {
+            Text(
+                text = stringResource(id = R.string.error_select),
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        OutlinedTextField(
+            value = berat.value,
+            onValueChange = { newValue ->
+                berat.value = newValue
+                weightError = false
+            },
+            label = { Text(text = stringResource(id = R.string.weight)) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            isError = weightError
+        )
+        if (weightError) {
+            Text(
+                text = stringResource(id = R.string.error_weight),
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
 
-        @Preview(showBackground = true)
-        @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-        @Composable
-        fun ScreenPreview() {
-            val navController = rememberNavController()
-            MobproTheme {
-                MainScreen(navController)
+        Button(
+            onClick = {
+                valid = true
+                if (selectedType.value.isEmpty()) {
+                    typeError = true
+                    valid = false
+                }
+                if (berat.value.isEmpty() || berat.value.toFloatOrNull() == null) {
+                    weightError = true
+                    valid = false
+                }
+
+                if (valid) {
+                    val beratValue = berat.value.toFloat()
+                    val total: Float = if (selectedType.value == "Premium") {
+                        beratValue * 8000
+                    } else {
+                        beratValue * 6000
+                    }
+                    totalHarga = total
+                }
+            },
+            modifier = Modifier.padding(top = 20.dp)
+        ) {
+            Text(text = stringResource(id = R.string.submit))
+        }
+        if (valid && totalHarga != null) {
+            Text(
+                text = "Laundry: ${selectedType.value}\nTotal: Rp.${totalHarga!!}",
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            Button(
+                onClick = {
+                    shareData(context, "Laundry: ${selectedType.value}\nTotal: Rp.${totalHarga!!}")
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(R.string.share))
             }
         }
+    }
+}
+
+private fun shareData(context: Context, message: String) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if (shareIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(shareIntent)
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun ScreenPreview() {
+    val navController = rememberNavController()
+    MobproTheme {
+        MainScreen(navController)
+    }
+}

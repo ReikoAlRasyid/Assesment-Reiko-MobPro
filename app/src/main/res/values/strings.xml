@@ -13,5 +13,7 @@
     <string name="premium" translatable="true">Premium</string>
     <string name="intro" translatable="true">Welcome to the Laundry Yuk, an Application that can help you calculate the weight, price and type of your Laundry. Currently this application can only calculate the weight, price and type. But maybe in the future you will also be able to order Laundry Services from Here, Come on Lets Try It!!</string>
     <string name="yes" translatable="true">Yes</string>
+    <string name="error_select" translatable="true">Please Select The One You Want</string>
+    <string name="error_weight" translatable="true">Please Input Weight Of Laundry</string>
     <string name="no" translatable="true">No</string>
 </resources>
