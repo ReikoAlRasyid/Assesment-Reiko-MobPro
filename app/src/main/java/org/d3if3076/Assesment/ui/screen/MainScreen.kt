@@ -31,6 +31,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import org.d3if3076.Assesment.R
 import org.d3if3076.Assesment.database.LaundryDb
 import org.d3if3076.Assesment.model.Laundry
@@ -54,10 +57,13 @@ import org.d3if3076.Assesment.navigation.Screen
 import org.d3if3076.Assesment.ui.theme.MobproTheme
 import org.d3if3076.Assesment.util.SettingsDataStore
 import org.d3if3076.Assesment.util.ViewModelFactory
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.runtime.LaunchedEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController:NavHostController) {
+fun MainScreen(navController: NavHostController) {
     val dataStore = SettingsDataStore(LocalContext.current)
     val showList by dataStore.layoutFlow.collectAsState(true)
     Scaffold(
@@ -106,17 +112,34 @@ fun MainScreen(navController:NavHostController) {
             }
         }
     ) { padding ->
-        ScreenContent(showList,modifier = Modifier.padding(padding),navController)
+        ScreenContent(showList, modifier = Modifier.padding(padding), navController)
     }
 }
 
 @Composable
-fun ScreenContent(showList:Boolean,modifier: Modifier, navController: NavHostController) {
+fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostController) {
     val context = LocalContext.current
     val db = LaundryDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
     val viewModel: MainViewModel = viewModel(factory = factory)
     val data by viewModel.data.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val listState = rememberLazyListState()
+    val gridState = rememberLazyStaggeredGridState()
+
+    LaunchedEffect(data) {
+        if (data.isNotEmpty()) {
+            coroutineScope.launch {
+                if (showList) {
+                    listState.animateScrollToItem(data.size - 1)
+                } else {
+                    gridState.scrollToItem(data.size - 1)
+                }
+            }
+        }
+    }
+
     if (data.isEmpty()) {
         Column(
             modifier = modifier
@@ -127,13 +150,12 @@ fun ScreenContent(showList:Boolean,modifier: Modifier, navController: NavHostCon
         ) {
             Text(text = stringResource(id = R.string.empty))
         }
-    }
-    else {
+    } else {
         if (showList) {
             LazyColumn(
-                modifier = modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 84.dp)
+                modifier = modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 84.dp),
+                state = listState // Pass the list state here
             ) {
                 items(data) {
                     ListItem(laundry = it) {
@@ -142,15 +164,15 @@ fun ScreenContent(showList:Boolean,modifier: Modifier, navController: NavHostCon
                     Divider()
                 }
             }
-        }
-        else{
+        } else {
             LazyVerticalStaggeredGrid(
                 modifier = Modifier.fillMaxSize(),
                 columns = StaggeredGridCells.Fixed(2),
                 verticalItemSpacing = 8.dp,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(16.dp, 82.dp, 16.dp, 84.dp  )
-            ){
+                contentPadding = PaddingValues(16.dp, 82.dp, 16.dp, 84.dp),
+                state = gridState // Pass the grid state here
+            ) {
                 items(data) {
                     GridItem(laundry = it) {
                         navController.navigate(Screen.FormUbah.withId(id = it.id))
@@ -161,19 +183,22 @@ fun ScreenContent(showList:Boolean,modifier: Modifier, navController: NavHostCon
     }
 }
 
+
 @Composable
 fun ListItem(laundry: Laundry, onClick: () -> Unit) {
     fun formatFloat(value: Float, decimalPlaces: Int = 2): String {
         return "Rp. " + String.format("%.${decimalPlaces}f", value)
     }
-    Column (
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
-    ){
-        Text(text = laundry.nama,
+    ) {
+        Text(
+            text = laundry.nama,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontWeight = FontWeight.Bold
@@ -200,9 +225,10 @@ fun ListItem(laundry: Laundry, onClick: () -> Unit) {
 
 @Composable
 fun GridItem(laundry: Laundry, onClick: () -> Unit) {
-     fun formatFloat(value: Float, decimalPlaces: Int = 2): String {
-         return "Rp. " + String.format("%.${decimalPlaces}f", value)
+    fun formatFloat(value: Float, decimalPlaces: Int = 2): String {
+        return "Rp. " + String.format("%.${decimalPlaces}f", value)
     }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -242,6 +268,7 @@ fun GridItem(laundry: Laundry, onClick: () -> Unit) {
         }
     }
 }
+
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun ScreenPreview() {
