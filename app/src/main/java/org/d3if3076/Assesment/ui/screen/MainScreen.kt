@@ -205,7 +205,7 @@ fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) 
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(data) { laundry ->
-                    ListItem(hewan = laundry, onDelete = { Id ->
+                    ListItem(laundry = laundry, onDelete = { Id ->
                         Log.d("ScreenContent", "Deleting Laundry with ID: $Id")
                         viewModel.deleteData(userId, Id)
                     })
@@ -235,17 +235,29 @@ fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) 
 }
 
 @Composable
-fun ListItem(hewan: Laundry, onDelete: (Int) -> Unit) {
+fun ListItem(laundry: Laundry, onDelete: (Int) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
 
     DeleteDialog(
         openDialog = showDialog,
         onDismissRequest = { showDialog = false },
         onConfirmation = {
-            onDelete(hewan.id)
+            onDelete(laundry.id)
             showDialog = false
         }
     )
+
+    // Function to calculate the total price
+    fun calculateTotalPrice(berat: String, jenis: String): Int {
+        val weight = berat.toIntOrNull() ?: 0
+        return when (jenis) {
+            "Premium" -> weight * 8000
+            "Normal" -> weight * 5000
+            else -> 0
+        }
+    }
+
+    val totalPrice = calculateTotalPrice(laundry.berat, laundry.jenis)
 
     Box(
         modifier = Modifier
@@ -255,10 +267,10 @@ fun ListItem(hewan: Laundry, onDelete: (Int) -> Unit) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(LaundryApi.getLaundryUrl(hewan.imageId))
+                .data(LaundryApi.getLaundryUrl(laundry.imageId))
                 .crossfade(true)
                 .build(),
-            contentDescription = stringResource(id = R.string.picture, hewan.nama),
+            contentDescription = stringResource(id = R.string.picture, laundry.nama),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.loading_img),
             error = painterResource(id = R.drawable.broken_img),
@@ -274,20 +286,19 @@ fun ListItem(hewan: Laundry, onDelete: (Int) -> Unit) {
                 .background(Color(0f, 0f, 0f, 0.5f))
                 .padding(4.dp)
         ) {
-            Column(
-            ) {
+            Column {
                 Text(
-                    text = hewan.nama,
+                    text = laundry.nama,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    text = "${hewan.berat} KG",
+                    text = "Rp. ${totalPrice}",
                     fontSize = 14.sp,
                     color = Color.White
                 )
                 Text(
-                    text = hewan.jenis,
+                    text = laundry.jenis,
                     fontSize = 14.sp,
                     color = Color.White
                 )
@@ -302,6 +313,7 @@ fun ListItem(hewan: Laundry, onDelete: (Int) -> Unit) {
         }
     }
 }
+
 
 
 
